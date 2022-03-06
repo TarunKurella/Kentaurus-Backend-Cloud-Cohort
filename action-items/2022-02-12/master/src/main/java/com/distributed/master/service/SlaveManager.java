@@ -2,6 +2,8 @@ package com.distributed.master.service;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -10,7 +12,10 @@ public class SlaveManager {
 
 
     //node. 0 is master. So default no of nodes always 1
-    private AtomicInteger noOfNodes = new AtomicInteger(1);
+    private AtomicInteger noOfNodes = new AtomicInteger();
+    SlaveManager(){
+        noOfNodes.set(1);
+    }
     ConcurrentHashMap<Integer,Boolean> slaveStatusCache = new ConcurrentHashMap();
     ConcurrentHashMap<Integer,String> idToUrl= new ConcurrentHashMap();
 
@@ -23,12 +28,17 @@ public class SlaveManager {
         return id;
     }
 
+    public List<Integer> getStatusofNodes(){
+        List<Integer> nodes = new ArrayList<>();
+        slaveStatusCache.forEach((key,value)->{if(value)nodes.add(key);});
+        return nodes;
+    }
     public Boolean removeSlave(int id){
         return true;
     }
 
-    public Boolean changeSlaveStatus(int id, boolean status){
-        slaveStatusCache.put(id,status);
+    public Boolean changeSlaveStatus(int id, String action){
+        slaveStatusCache.put(id,action.equals("enable")?true:false);
         return true;
     }
 
