@@ -86,7 +86,7 @@ public class StorageService {
     }
 
 
-    List<Word> returnAllWords() {
+    public List<Word> returnAllWords() {
         return (List<Word>) idToWord.values();
     }
 }
