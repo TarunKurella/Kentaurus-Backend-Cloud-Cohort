@@ -1,8 +1,11 @@
 package com.distributed.master.controller;
 
+import com.distributed.master.entity.InsertWordsRequest;
 import com.distributed.master.entity.Slave;
+import com.distributed.master.entity.Word;
 import com.distributed.master.service.RestService;
 import com.distributed.master.service.SlaveManager;
+import com.distributed.master.service.SlaveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,8 @@ public class MasterUtilsController {
     SlaveManager slaveManager;
     @Autowired
     RestService restService;
+    @Autowired
+    SlaveService slaveService;
 
     @PatchMapping("/node/{nodeId}")
     ResponseEntity changeStatus(@PathVariable("nodeId") int nodeId, @RequestParam String action){
@@ -41,5 +46,19 @@ public class MasterUtilsController {
         int id = slaveManager.addSlave(slave.getUrl());
         slave.setId(id);
         return new ResponseEntity(slave,HttpStatus.OK);
+    }
+
+    //post array of words
+    @PostMapping("/words")
+    ResponseEntity addWords(@RequestBody InsertWordsRequest insertWordsRequest){
+       slaveService.insertWords(insertWordsRequest.getWords());
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
+    //get all words
+    @GetMapping("/words")
+    ResponseEntity<List<Word>> getAllWords(){
+        return new ResponseEntity(slaveService.getAllWords(),HttpStatus.OK);
     }
 }
