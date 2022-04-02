@@ -71,6 +71,9 @@ public class MasterUtilsController {
     @DeleteMapping("/words/{word}")
     ResponseEntity deleteWord(@PathVariable("word") String word){
         boolean isExists =  slaveService.deleteWordFrom(word);
+        if(!isExists){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity(isExists,HttpStatus.OK);
     }
 
