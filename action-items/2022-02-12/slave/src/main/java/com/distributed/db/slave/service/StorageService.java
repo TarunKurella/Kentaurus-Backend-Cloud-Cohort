@@ -40,12 +40,21 @@ public class StorageService {
         AtomicBoolean isWordExists = new AtomicBoolean(false);
         try {
             lock.lock();
-            idToWord.forEach((k, v) -> {
+            Iterator<Map.Entry<String, Word>> iter = idToWord.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry<String, Word> entry = iter.next();
+                Word v = entry.getValue();
                 if (v.getWord().equals(word)) {
                     removeForId(v.getId());
                     isWordExists.set(true);
                 }
-            });
+            }
+//            idToWord.forEach((k, v) -> {
+//                if (v.getWord().equals(word)) {
+//                    removeForId(v.getId());
+//                    isWordExists.set(true);
+//                }
+//            });
 
 
         } finally {
@@ -87,6 +96,8 @@ public class StorageService {
 
 
     public List<Word> returnAllWords() {
-        return (List<Word>) idToWord.values();
+        List<Word> outputList = new ArrayList<>();
+        outputList.addAll(idToWord.values());
+        return outputList;
     }
 }
