@@ -79,4 +79,33 @@ public class RestService {
              throw e;
          }
      }
+
+    public boolean deleteWordFrom(String word,String url){
+        HttpHeaders headers = new HttpHeaders();
+        boolean wordExists;
+        HttpEntity<String> request = new HttpEntity<>(null, headers);
+        UriComponents builder= UriComponentsBuilder.fromHttpUrl(url+"/words"+"/"+word).build();
+        try{
+            HttpEntity<Boolean> response =  restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, request , Boolean.class);
+            wordExists = response.getBody();
+        }
+        catch(HttpStatusCodeException e){
+            log.info("oops");
+            throw e;
+        }
+        return wordExists;
+    }
+
+    public void deleteAllWordsFrom(String url){
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<>(null, headers);
+        UriComponents builder= UriComponentsBuilder.fromHttpUrl(url+"/words").build();
+        try{
+            HttpEntity<String> response =  restTemplate.exchange(builder.toUriString(), HttpMethod.DELETE, request , String.class);
+        }
+        catch(HttpStatusCodeException e){
+            log.info("oops");
+            throw e;
+        }
+    }
 }

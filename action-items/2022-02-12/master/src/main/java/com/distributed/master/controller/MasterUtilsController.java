@@ -61,4 +61,18 @@ public class MasterUtilsController {
     ResponseEntity<List<Word>> getAllWords(){
         return new ResponseEntity(slaveService.getAllWords(),HttpStatus.OK);
     }
+
+    @DeleteMapping("/words")
+    ResponseEntity deleteWords(){
+        slaveService.deleteAllWords();
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/words/{word}")
+    ResponseEntity deleteWord(@PathVariable("word") String word){
+        boolean isExists =  slaveService.deleteWordFrom(word);
+        return new ResponseEntity(isExists,HttpStatus.OK);
+    }
+
+
 }

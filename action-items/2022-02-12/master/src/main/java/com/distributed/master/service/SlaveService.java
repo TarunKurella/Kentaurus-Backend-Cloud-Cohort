@@ -38,4 +38,24 @@ public class SlaveService {
         }
         return combinedOutput;
     }
+
+    public boolean deleteWordFrom(String word) {
+
+        int noOFslaves = slaveManager.getNoOfNodes()-1;
+        boolean isWordExists=false;
+        //can make below line run parallel?
+        for (int i = 0; i < noOFslaves; i++) {
+            isWordExists|=restService.deleteWordFrom(word,loadBalancingService.getIp());
+        }
+        return isWordExists;
+    }
+
+    public void deleteAllWords() {
+
+        int noOFslaves = slaveManager.getNoOfNodes()-1;
+        //can make below line run parallel?
+        for (int i = 0; i < noOFslaves; i++) {
+            restService.deleteAllWordsFrom(loadBalancingService.getIp());
+        }
+    }
 }
